@@ -96,7 +96,9 @@ class Listing extends Component {
           <View style={[styles.col, styles.right]}>
             <Item label="Temp" uom="°C">
               {' '}
-              {item && item.temperature}{' '}
+              {item && item.temperature
+                ? parseFloat(item.temperature).toFixed(1)
+                : 0}{' '}
             </Item>
             <Item label="Date"> {item && item.date} </Item>
             <Item label="Time"> {item && item.time} </Item>
@@ -234,7 +236,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     marginHorizontal: Theme.padding,
     marginVertical: Theme.margin / 2,
-    padding: Theme.padding,
+    paddingHorizontal: Theme.padding,
     backgroundColor: Colors.white,
     borderRadius: Theme.radius,
     shadowColor: Colors.black,
