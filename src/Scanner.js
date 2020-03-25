@@ -1,7 +1,10 @@
 import React, {Component} from 'react';
-import {StyleSheet, View, Alert, Dimensions} from 'react-native';
+import {StyleSheet, View, Alert, Dimensions, Text, TouchableOpacity} from 'react-native';
 import QRCodeScanner from 'react-native-qrcode-scanner';
 import {RNCamera as Camera} from 'react-native-camera';
+import {Icon} from 'react-native-elements';
+
+import Colors from './constants/colors.constant';
 
 const {height} = Dimensions.get('window');
 
@@ -35,9 +38,28 @@ class Scanner extends Component {
         setActiveQrCode: () => this.setActiveQrCode(),
       });
     }
+    // this.props.navigation.navigate('ResultDetail', {
+    //   result: ["1042743", "ROBBY2", "EMANG2", "PETRONAS2"],
+    //   setActiveQrCode: () => this.setActiveQrCode(),
+    // });
   };
   closeModal = () => {
-    this.setState({isShow: false});
+    this.setState({ isShow: false });
+  };
+
+  renderGoback = () => {
+    return (
+      <View style={styles.backContainer}>
+        <TouchableOpacity
+          style={styles.backTouch}
+          onPress={() => {
+            this.props.navigation.goBack();
+          }}>
+          <Icon type="ionicon" name="ios-arrow-back" color={Colors.success} size={30} />
+          <Text style={styles.backText}>Back</Text>
+        </TouchableOpacity>
+      </View>
+    );
   };
 
   render() {
@@ -57,6 +79,13 @@ class Scanner extends Component {
           showMarker={true}
           markerStyle={styles.maker}
         />
+        {this.renderGoback()}
+        <View style={styles.manualContainer}>
+          <TouchableOpacity>
+            <Text style={styles.manualText}>Dont have QR code? Manual Input</Text>
+          </TouchableOpacity>
+
+        </View>
       </View>
     );
   }
@@ -78,5 +107,31 @@ const styles = StyleSheet.create({
   },
   maker: {
     // bor
+  },
+  backContainer: {
+    position: 'absolute',
+    top: 10,
+    left: 10,
+  },
+  backTouch: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  backText: {
+    color: Colors.success,
+    marginLeft: 10,
+    fontSize: 18,
+  },
+  manualContainer: {
+    position: 'absolute',
+    top: height - 100,
+    left: 0,
+    right: 0,
+    justifyContent: 'center',
+    alignItems: 'center',
+    // backgroundColor: Colors.success
+  },
+  manualText: {
+    color: Colors.success,
   },
 });

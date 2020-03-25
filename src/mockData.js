@@ -7,7 +7,7 @@ const RECORDS = [
     company: 'FPT Software',
     date: '01/01/2020',
     time: '12:30',
-    temp: 36.5,
+    temperature: 36.5,
   },
   {
     id: 2,
@@ -17,7 +17,7 @@ const RECORDS = [
     company: 'FPT Software',
     date: '01/01/2020',
     time: '12:30',
-    temp: 36.5,
+    temperature: 36.5,
   },
   {
     id: 3,
@@ -27,7 +27,7 @@ const RECORDS = [
     company: 'FPT Software',
     date: '01/01/2020',
     time: '12:30',
-    temp: 36.5,
+    temperature: 36.5,
   },
   {
     id: 4,
@@ -37,7 +37,7 @@ const RECORDS = [
     company: 'FPT Software',
     date: '01/01/2020',
     time: '12:30',
-    temp: 36.5,
+    temperature: 36.5,
   },
   {
     id: 5,
@@ -47,7 +47,7 @@ const RECORDS = [
     company: 'FPT Software',
     date: '01/01/2020',
     time: '12:30',
-    temp: 36.5,
+    temperature: 36.5,
   },
 ];
 

@@ -8,6 +8,7 @@ import {
   TouchableOpacity,
   ScrollView,
   ToastAndroid,
+  Alert,
 } from 'react-native';
 import AsyncStorage from '@react-native-community/async-storage';
 import moment from 'moment';
@@ -42,13 +43,36 @@ class ResultDetail extends Component {
     });
   };
 
-  submit = async () => {
+  submitConfirm = async () => {
     const listString = await AsyncStorage.getItem('List');
     let list = listString ? JSON.parse(listString) : [];
-    list.unshift({...this.state});
+    list.unshift({ ...this.state });
     await AsyncStorage.setItem('List', JSON.stringify(list));
     ToastAndroid.show('Record Added.', ToastAndroid.SHORT, ToastAndroid.BOTTOM);
     this.props.navigation.goBack();
+  };
+
+  submit = () => {
+    Alert.alert(
+      'Do you want to submit?',
+      'Do you want to submit this record?',
+      [
+        {
+          text: 'Cancel',
+          onPress: () => console.log('Cancel Pressed'),
+          style: 'cancel',
+        },
+        {
+          text: 'OK',
+          onPress: () => {
+            this.submitConfirm();
+          },
+        },
+      ],
+      {
+        cancelable: false,
+      },
+    );
   };
 
   render() {
