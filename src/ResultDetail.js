@@ -63,7 +63,7 @@ class ResultDetail extends Component {
           <View style={[styles.left, styles.col]}>
             <Text style={[styles.text, styles.label]}>ID: </Text>
             <Text style={[styles.text, styles.label]}>First Name: </Text>
-            <Text style={[styles.text, styles.label]}>LastName: </Text>
+            <Text style={[styles.text, styles.label]}>Last Name: </Text>
             <Text style={[styles.text, styles.label]}>Company: </Text>
           </View>
           <View style={[styles.right, styles.col]}>
