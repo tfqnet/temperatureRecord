@@ -16,6 +16,7 @@ import RNFS, {writeFile} from 'react-native-fs';
 import XLSX from 'xlsx';
 import Share from 'react-native-share';
 import moment from 'moment';
+import LinearGradient from 'react-native-linear-gradient';
 
 import Colors from './constants/colors.constant';
 import Images from './constants/image.constant';
@@ -54,21 +55,27 @@ class Listing extends Component {
 
   renderHeader = () => {
     return (
-      <View style={[styles.headerContainer]}>
+      // <View style={[styles.headerContainer]}>
+      <LinearGradient
+        style={[styles.headerContainer]}
+        start={{x: 0.6, y: 1}}
+        end={{x: 1.7, y: 1}}
+        colors={[Colors.petronas700, Colors.info50]}>
         <TouchableOpacity
           style={styles.touch}
           onPress={() => this.openScanner()}>
           <Image style={styles.image} source={Images.qrCode} />
-          <Text style={styles.headerText}>Scan</Text>
+          {/* <Text style={styles.headerText}>Scan</Text> */}
         </TouchableOpacity>
         <Text style={styles.title}>List</Text>
         <TouchableOpacity
           style={styles.touch}
           onPress={() => this.exportExcel()}>
           <Image style={styles.image} source={Images.export} />
-          <Text style={styles.headerText}>Export</Text>
+          {/* <Text style={styles.headerText}>Export</Text> */}
         </TouchableOpacity>
-      </View>
+      </LinearGradient>
+      // </View>
     );
   };
   keyExtractor = (item, index) => `${item.id}${index}`;
@@ -265,8 +272,8 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
     paddingHorizontal: Theme.padding,
-    paddingVertical: Theme.padding,
-    backgroundColor: Colors.petronas,
+    paddingVertical: 0,
+    // backgroundColor: Colors.petronas,
   },
   title: {
     fontSize: 36,
