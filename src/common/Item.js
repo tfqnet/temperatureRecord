@@ -8,7 +8,7 @@ const Item = props => {
   return (
     <View style={[styles.container, iStyle]}>
       <Text style={styles.label}> {label} </Text>
-      <Text style={styles.content}>
+      <Text style={[styles.content, uom !== '' && styles.bigText]}>
         {' '}
         {children} {uom}{' '}
       </Text>
@@ -34,5 +34,9 @@ const styles = StyleSheet.create({
     fontFamily: 'Arial',
     fontWeight: '400',
     color: Colors.textcolors50,
+  },
+  bigText: {
+    fontWeight: '700',
+    fontSize: 18,
   },
 });
