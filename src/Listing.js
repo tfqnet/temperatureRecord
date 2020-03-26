@@ -17,11 +17,14 @@ import XLSX from 'xlsx';
 import Share from 'react-native-share';
 import moment from 'moment';
 import LinearGradient from 'react-native-linear-gradient';
+import Swipeable from 'react-native-swipeable-row';
+import {Icon} from 'react-native-elements';
 
 import Colors from './constants/colors.constant';
 import Images from './constants/image.constant';
 import Theme from './constants/theme.constant';
 import Item from './common/Item';
+import RECORDS from './mockData';
 
 const {width, height} = Dimensions.get('window');
 
@@ -33,6 +36,15 @@ class Listing extends Component {
       isVisibleExport: false,
       isShowDatePicker: false,
       exportDate: new Date(),
+      isModalVisible: false,
+      selectedId: '',
+      selectedFirstName: '',
+      selectedLastName: '',
+      selectedCompany: '',
+      selectedDate: '',
+      selectedTime: '',
+      selectedTemperature: '',
+      selectedColor: '',
     };
   }
 
@@ -44,6 +56,9 @@ class Listing extends Component {
     const listString = await AsyncStorage.getItem('List');
     let list = listString ? JSON.parse(listString) : [];
     this.setState({list});
+    // this.setState({
+    //   list: RECORDS,
+    // })
   }
 
   openScanner = () => {
@@ -51,6 +66,16 @@ class Listing extends Component {
   };
   exportExcel = () => {
     this.setState({isVisibleExport: true});
+  };
+
+  onDelete = async index => {
+    var {list} = this.state;
+    await list.splice(index, 1);
+    await AsyncStorage.setItem('List', JSON.stringify(list)).then(() => {
+      this.setState({
+        list,
+      });
+    });
   };
 
   renderHeader = () => {
@@ -78,10 +103,37 @@ class Listing extends Component {
       // </View>
     );
   };
+
   keyExtractor = (item, index) => `${item.id}${index}`;
 
-  onClickItem = item => {
+  onClickItem = (item, color) => {
     console.log('anhvt14 - onClickItem', item);
+    // const {isModalVisible} = this.state;
+    this.setState({
+      isModalVisible: true,
+      selectedId: item.id,
+      selectedFirstName: item.firstName,
+      selectedLastName: item.lastName,
+      selectedCompany: item.company,
+      selectedDate: item.date,
+      selectedTime: item.time,
+      selectedTemperature: item.temperature,
+      selectedColor: color,
+    });
+  };
+
+  renderDeleteButton = (index) => {
+    return (
+      <View style={styles.deleteView}>
+        <TouchableOpacity
+          style={styles.rightButtonTouch}
+          onPress={() => {
+            this.onDelete(index);
+          }}>
+          <Icon name="trash" type="entypo" color={Colors.white} />
+        </TouchableOpacity>
+      </View>
+    );
   };
 
   renderItem = ({item, index}) => {
@@ -92,26 +144,35 @@ class Listing extends Component {
         ? Colors.warning700
         : Colors.success700;
     return (
-      <TouchableOpacity onPress={() => this.onClickItem(item)}>
-        <View style={[styles.card, {borderLeftColor: color}]}>
-          <View style={[styles.col, styles.left]}>
-            <Item label="ID"> {item && item.id} </Item>
-            <Item label="First Name"> {item && item.firstName} </Item>
-            <Item label="Last Name"> {item && item.lastName} </Item>
-            <Item label="Company"> {item && item.company} </Item>
+      <Swipeable rightButtons={[this.renderDeleteButton(index)]}>
+        <TouchableOpacity onPress={() => this.onClickItem(item, color)}>
+          <View style={styles.card}>
+            <View style={[styles.col, styles.left]}>
+              <Text style={styles.nameLabel} numberOfLines={1}>
+                {((item && item.firstName) || '') +
+                  ' ' +
+                  ((item && item.lastName) || '')}
+              </Text>
+              <Text style={styles.companyLabel} numberOfLines={1}>{item && item.company}</Text>
+              <Text style={styles.timeLabel} numberOfLines={2}>
+                {((item && item.time) || '') +
+                  ' ' +
+                  ((item && item.date) || '')}
+              </Text>
+            </View>
+            <View style={[styles.col, styles.right]}>
+              <View style={[styles.tempContainer, {backgroundColor: color}]}>
+                <Text style={styles.tempText}>
+                  {item && item.temperature
+                    ? parseFloat(item.temperature).toFixed(1)
+                    : 0}
+                  {'°C'}
+                </Text>
+              </View>
+            </View>
           </View>
-          <View style={[styles.col, styles.right]}>
-            <Item label="Temp" uom="°C">
-              {' '}
-              {item && item.temperature
-                ? parseFloat(item.temperature).toFixed(1)
-                : 0}{' '}
-            </Item>
-            <Item label="Date"> {item && item.date} </Item>
-            <Item label="Time"> {item && item.time} </Item>
-          </View>
-        </View>
-      </TouchableOpacity>
+        </TouchableOpacity>
+      </Swipeable>
     );
   };
 
@@ -215,8 +276,86 @@ class Listing extends Component {
     );
   };
 
+  renderBackgroundModal = () => {
+    return (
+      <View style={styles.modalBackground}>
+        <TouchableOpacity
+          style={styles.modalTouchOutSite}
+          onPress={() => {
+            this.setState({
+              isModalVisible: false,
+            });
+          }}
+        />
+      </View>
+    );
+  };
+
+  renderModal = () => {
+    const {
+      selectedId,
+      selectedFirstName,
+      selectedLastName,
+      selectedCompany,
+      selectedDate,
+      selectedTime,
+      selectedTemperature,
+      selectedColor,
+    } = this.state;
+    return (
+      <View style={styles.modalMainContainer}>
+        <View style={[styles.modalHeader, {backgroundColor: selectedColor}]}>
+          <Text style={styles.modalHeaderText}>Employee Info</Text>
+        </View>
+        <View style={styles.contentView}>
+          <Text style={styles.contentLabel}>
+            ID:
+            <Text style={{ fontWeight: '300' }}>{" " + selectedId}</Text>
+          </Text>
+        </View>
+        <View style={styles.contentView}>
+          <Text style={styles.contentLabel}>
+            First name:
+            <Text style={{ fontWeight: '300' }}>{" " + selectedFirstName}</Text>
+          </Text>
+        </View>
+        <View style={styles.contentView}>
+          <Text style={styles.contentLabel}>
+            Last name:
+            <Text style={{ fontWeight: '300' }}>{" " + selectedLastName}</Text>
+          </Text>
+        </View>
+        <View style={styles.contentView}>
+          <Text style={styles.contentLabel}>
+            Company:
+            <Text style={{ fontWeight: '300' }}>{" " + selectedCompany}</Text>
+          </Text>
+        </View>
+        <View style={styles.contentView}>
+          <Text style={styles.contentLabel}>
+            Temp:
+            <Text style={{ fontWeight: '300' }}>{" " + selectedTemperature + '°C'}</Text>
+          </Text>
+        </View>
+        <View style={styles.contentView}>
+          <Text style={styles.contentLabel}>
+            Date:
+            <Text style={{ fontWeight: '300' }}>{" " + selectedDate}</Text>
+          </Text>
+        </View>
+        <View style={styles.contentView}>
+          <Text style={styles.contentLabel}>
+            Time:
+            <Text style={{ fontWeight: '300' }}>{" " + selectedTime}</Text>
+          </Text>
+        </View>
+      </View>
+    );
+  };
+
   render() {
-    const {list} = this.state;
+    const {list, isModalVisible} = this.state;
+    // console.log("anhnk7 - list temp", JSON.stringify(list))
     return (
       <View style={styles.container}>
         {this.renderHeader()}
@@ -227,6 +366,8 @@ class Listing extends Component {
           extraData={this.state}
           keyExtractor={this.keyExtractor}
         />
+        {isModalVisible && this.renderBackgroundModal()}
+        {isModalVisible && this.renderModal()}
       </View>
     );
   }
@@ -243,7 +384,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     marginHorizontal: Theme.padding,
     marginVertical: Theme.margin / 2,
-    paddingHorizontal: Theme.padding,
+    // paddingHorizontal: Theme.padding,
     backgroundColor: Colors.white,
     borderRadius: Theme.radius,
     shadowColor: Colors.black,
@@ -251,7 +392,7 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.5,
     shadowRadius: 3,
     elevation: 2,
-    borderLeftWidth: 10,
+    // borderLeftWidth: 10,
   },
   col: {
     flex: 1,
@@ -261,9 +402,13 @@ const styles = StyleSheet.create({
   },
   left: {
     flex: 2,
+    paddingHorizontal: Theme.padding,
+    paddingVertical: Theme.padding,
   },
   right: {
     flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   headerContainer: {
     // height: 48,
@@ -329,5 +474,88 @@ const styles = StyleSheet.create({
     borderRadius: Theme.radius,
     borderWidth: 1,
     borderColor: Colors.black,
+  },
+  deleteView: {
+    flex: 1,
+    backgroundColor: Colors.danger,
+    justifyContent: 'center',
+    alignItems: 'center',
+    width: 75,
+    // paddingLeft: 10,
+  },
+  modalBackground: {
+    position: 'absolute',
+    top: 0,
+    right: 0,
+    left: 0,
+    bottom: 0,
+    backgroundColor: 'rgba(0, 0, 0, 0.7)',
+  },
+  modalTouchOutSite: {
+    flex: 1,
+    width: '100%',
+  },
+  modalMainContainer: {
+    position: 'absolute',
+    width: '80%',
+    // height: 100,
+    top: width / 5,
+    left: width / 10,
+    backgroundColor: Colors.white,
+    borderRadius: Theme.radius,
+    shadowColor: Colors.black,
+    shadowOffset: {width: 1, height: 1},
+    shadowOpacity: 0.8,
+    shadowRadius: 5,
+    elevation: 2,
+  },
+  modalHeader: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: Colors.petronas700,
+    borderRadius: Theme.radius,
+    paddingVertical: Theme.padding,
+  },
+  contentView: {
+    paddingHorizontal: Theme.padding,
+    paddingVertical: Theme.padding / 2,
+  },
+  contentLabel: {
+    fontWeight: '700',
+  },
+  modalHeaderText: {
+    color: Colors.white,
+    fontSize: 16,
+    fontWeight: '700',
+  },
+  nameLabel: {
+    fontSize: 18,
+    fontWeight: '700',
+  },
+  companyLabel: {
+    fontSize: 14,
+  },
+  timeLabel: {
+    fontSize: 12,
+    color: Colors.gray700,
+  },
+  tempContainer: {
+    flex: 1,
+    width: '100%',
+    borderRadius: Theme.radius,
+    // backgroundColor: Colors.danger,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  tempText: {
+    fontSize: 20,
+    fontWeight: '700',
+    color: Colors.white,
+  },
+  rightButtonTouch: {
+    flex: 1,
+    width: '100%',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 });
