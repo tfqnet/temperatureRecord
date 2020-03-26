@@ -125,12 +125,13 @@ class Listing extends Component {
   renderDeleteButton = (index) => {
     return (
       <View style={styles.deleteView}>
-        {/* <TouchableOpacity
+        <TouchableOpacity
+          style={styles.rightButtonTouch}
           onPress={() => {
             this.onDelete(index);
           }}>
-          <Icon name="trash" type="entypo" color={Colors.danger} />
-        </TouchableOpacity> */}
+          <Icon name="trash" type="entypo" color={Colors.white} />
+        </TouchableOpacity>
       </View>
     );
   };
@@ -143,22 +144,10 @@ class Listing extends Component {
         ? Colors.warning700
         : Colors.success700;
     return (
-      <Swipeable
-        rightContent={this.renderDeleteButton(index)}
-        leftContent={this.renderDeleteButton(index)}
-        onRightActionRelease={() => {
-          this.onDelete(index);
-        }}
-        onLeftActionRelease={() => {
-          this.onDelete(index);
-        }}>
+      <Swipeable rightButtons={[this.renderDeleteButton(index)]}>
         <TouchableOpacity onPress={() => this.onClickItem(item, color)}>
           <View style={styles.card}>
             <View style={[styles.col, styles.left]}>
-              {/* <Item label="ID"> {item && item.id} </Item>
-              <Item label="First Name"> {item && item.firstName} </Item>
-              <Item label="Last Name"> {item && item.lastName} </Item>
-              <Item label="Company"> {item && item.company} </Item> */}
               <Text style={styles.nameLabel} numberOfLines={1}>
                 {((item && item.firstName) || '') +
                   ' ' +
@@ -345,7 +334,7 @@ class Listing extends Component {
         <View style={styles.contentView}>
           <Text style={styles.contentLabel}>
             Temp:
-            <Text style={{ fontWeight: '300' }}>{" " + selectedTemperature}</Text>
+            <Text style={{ fontWeight: '300' }}>{" " + selectedTemperature + '°C'}</Text>
           </Text>
         </View>
         <View style={styles.contentView}>
@@ -488,10 +477,11 @@ const styles = StyleSheet.create({
   },
   deleteView: {
     flex: 1,
-    // backgroundColor: Colors.danger,
+    backgroundColor: Colors.danger,
     justifyContent: 'center',
-    alignItems: 'flex-start',
-    paddingLeft: 10,
+    alignItems: 'center',
+    width: 75,
+    // paddingLeft: 10,
   },
   modalBackground: {
     position: 'absolute',
@@ -561,5 +551,11 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: '700',
     color: Colors.white,
+  },
+  rightButtonTouch: {
+    flex: 1,
+    width: '100%',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 });

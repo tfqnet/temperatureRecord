@@ -17,20 +17,22 @@ import Theme from './constants/theme.constant';
 import Colors from './constants/colors.constant';
 
 const {width} = Dimensions.get('screen');
-class ResultDetail extends Component {
+class InputManual extends Component {
   constructor(props) {
     super(props);
-    const {navigation} = this.props;
-    const result = navigation.getParam('result');
     this.state = {
-      id: result[0],
-      firstName: result[1],
-      lastName: result[2],
-      company: result[3],
+      id: '',
+      firstName: '',
+      lastName: '',
+      company: '',
       date: moment().format('YYYY-MM-DD'),
       time: moment().format('HH:mm:ss'),
       temperature: 0,
       color: Colors.success,
+      idError: false,
+      firstNameError: false,
+      lastNameError: false,
+      companyError: false,
     };
   }
 
@@ -51,6 +53,35 @@ class ResultDetail extends Component {
     });
   };
 
+  handleChangeId = id => {
+    this.setState({
+      id,
+      idError: false,
+    });
+  };
+
+  handleChangeFirstName = firstName => {
+    this.setState({
+      firstName,
+      firstNameError: false,
+    });
+  };
+
+  handleChangeLastNane = lastName => {
+    this.setState({
+      lastName,
+      lastNameError: false,
+    });
+  };
+
+  handleChangeCompany = company => {
+    console.log("company", company)
+    this.setState({
+      company,
+      companyError: false,
+    });
+  };
+
   submit = async () => {
     const {
       id,
@@ -61,6 +92,34 @@ class ResultDetail extends Component {
       time,
       temperature,
     } = this.state;
+    let isError = false;
+    if (!id || id === '') {
+      this.setState({
+        idError: true,
+      });
+      isError = true;
+    }
+    if (!firstName || firstName === '') {
+      this.setState({
+        firstNameError: true,
+      });
+      isError = true;
+    }
+    if (!lastName || lastName === '') {
+      this.setState({
+        lastNameError: true,
+      });
+      isError = true;
+    }
+    if (!company || company === '') {
+      this.setState({
+        companyError: true,
+      });
+      isError = true;
+    }
+    if (isError) {
+      return;
+    }
 
     const object = {
       id,
@@ -81,7 +140,7 @@ class ResultDetail extends Component {
   };
 
   render() {
-    const {id, firstName, lastName, company, temperature, color} = this.state;
+    const {id, firstName, lastName, company, temperature, color, idError, firstNameError, lastNameError, companyError} = this.state;
     return (
       <ScrollView style={styles.container}>
         {/* <View style={styles.container}> */}
@@ -96,10 +155,44 @@ class ResultDetail extends Component {
             <Text style={[styles.text, styles.label]}>Company: </Text>
           </View>
           <View style={[styles.right, styles.col]}>
-            <Text style={[styles.text, styles.value]}> {id} </Text>
+            <TextInput
+              style={[styles.inputInfor]}
+              placeholder="ID"
+              placeholderTextColor={idError ? Colors.danger100 : Colors.gray}
+              value={id}
+              onChangeText={id => this.handleChangeId(id)}
+            />
+            <TextInput
+              style={[styles.inputInfor]}
+              placeholder="First Name"
+              placeholderTextColor={
+                firstNameError ? Colors.danger100 : Colors.gray
+              }
+              value={firstName}
+              onChangeText={firstName => this.handleChangeFirstName(firstName)}
+            />
+            <TextInput
+              style={[styles.inputInfor]}
+              placeholder="LastName"
+              placeholderTextColor={
+                lastNameError ? Colors.danger100 : Colors.gray
+              }
+              value={lastName}
+              onChangeText={lastName => this.handleChangeLastNane(lastName)}
+            />
+            <TextInput
+              style={[styles.inputInfor]}
+              placeholder="Company"
+              placeholderTextColor={
+                companyError ? Colors.danger100 : Colors.gray
+              }
+              value={company}
+              onChangeText={company => this.handleChangeCompany(company)}
+            />
+            {/* <Text style={[styles.text, styles.value]}> {id} </Text>
             <Text style={[styles.text, styles.value]}> {firstName} </Text>
             <Text style={[styles.text, styles.value]}> {lastName} </Text>
-            <Text style={[styles.text, styles.value]}> {company} </Text>
+            <Text style={[styles.text, styles.value]}> {company} </Text> */}
           </View>
           {/* <Item label="ID">{id}</Item> */}
         </View>
@@ -125,7 +218,7 @@ class ResultDetail extends Component {
     );
   }
 }
-export default ResultDetail;
+export default InputManual;
 
 const styles = StyleSheet.create({
   container: {
@@ -198,8 +291,13 @@ const styles = StyleSheet.create({
   },
   label: {
     fontWeight: '700',
+    height: 25,
   },
   value: {
     fontWeight: '500',
+  },
+  inputInfor: {
+    paddingHorizontal: Theme.padding,
+    height: 35,
   },
 });

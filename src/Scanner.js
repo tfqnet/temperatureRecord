@@ -81,10 +81,14 @@ class Scanner extends Component {
         />
         {this.renderGoback()}
         <View style={styles.manualContainer}>
-          <TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => {
+              this.props.navigation.navigate('InputManual', {
+                setActiveQrCode: () => this.setActiveQrCode(),
+              });
+            }}>
             <Text style={styles.manualText}>Dont have QR code? Manual Input</Text>
           </TouchableOpacity>
-
         </View>
       </View>
     );
