@@ -93,30 +93,30 @@ class InputManual extends Component {
       temperature,
     } = this.state;
     let isError = false;
-    if (!id || id === '') {
-      this.setState({
-        idError: true,
-      });
-      isError = true;
-    }
-    if (!firstName || firstName === '') {
-      this.setState({
-        firstNameError: true,
-      });
-      isError = true;
-    }
-    if (!lastName || lastName === '') {
-      this.setState({
-        lastNameError: true,
-      });
-      isError = true;
-    }
-    if (!company || company === '') {
-      this.setState({
-        companyError: true,
-      });
-      isError = true;
-    }
+    // if (!id || id === '') {
+    //   this.setState({
+    //     idError: true,
+    //   });
+    //   isError = true;
+    // }
+    // if (!firstName || firstName === '') {
+    //   this.setState({
+    //     firstNameError: true,
+    //   });
+    //   isError = true;
+    // }
+    // if (!lastName || lastName === '') {
+    //   this.setState({
+    //     lastNameError: true,
+    //   });
+    //   isError = true;
+    // }
+    // if (!company || company === '') {
+    //   this.setState({
+    //     companyError: true,
+    //   });
+    //   isError = true;
+    // }
     if (isError) {
       return;
     }
@@ -151,7 +151,7 @@ class InputManual extends Component {
           <View style={[styles.left, styles.col]}>
             <Text style={[styles.text, styles.label]}>ID: </Text>
             <Text style={[styles.text, styles.label]}>First Name: </Text>
-            <Text style={[styles.text, styles.label]}>LastName: </Text>
+            <Text style={[styles.text, styles.label]}>Last Name: </Text>
             <Text style={[styles.text, styles.label]}>Company: </Text>
           </View>
           <View style={[styles.right, styles.col]}>
@@ -173,7 +173,7 @@ class InputManual extends Component {
             />
             <TextInput
               style={[styles.inputInfor]}
-              placeholder="LastName"
+              placeholder="Last Name"
               placeholderTextColor={
                 lastNameError ? Colors.danger100 : Colors.gray
               }
@@ -200,7 +200,7 @@ class InputManual extends Component {
           <View style={[styles.inputContainer, {borderColor: color}]}>
             <TextInput
               style={[styles.input, {color: color}]}
-              placeholder="Enter Temperature"
+              placeholder="00.0"
               value={temperature}
               onChangeText={temp => this.handleChangeTemp(temp)}
               keyboardType={'number-pad'}
@@ -238,12 +238,12 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'row',
     paddingHorizontal: Theme.padding * 2,
-    marginTop: Theme.margin * 2,
+    marginTop: Theme.margin * 0.5,
   },
   col: {
     justifyContent: 'flex-start',
     alignItems: 'flex-start',
-    paddingVertical: 50,
+    paddingVertical: 0,
   },
   left: {
     flex: 1,
@@ -258,6 +258,8 @@ const styles = StyleSheet.create({
   },
   inputContainer: {
     borderWidth: 1,
+    height: 100,
+    width: 250,
     borderRadius: Theme.radius,
     paddingRight: 10,
     flexDirection: 'row',
@@ -269,7 +271,8 @@ const styles = StyleSheet.create({
     fontSize: 20,
   },
   input: {
-    width: 100,
+    width: 180,
+    fontSize: 60,
     paddingHorizontal: Theme.padding,
     paddingVertical: Theme.padding / 2,
     textAlign: 'center',
