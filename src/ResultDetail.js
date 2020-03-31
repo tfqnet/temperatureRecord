@@ -92,7 +92,7 @@ class ResultDetail extends Component {
           <View style={[styles.left, styles.col]}>
             <Text style={[styles.text, styles.label]}>ID: </Text>
             <Text style={[styles.text, styles.label]}>First Name: </Text>
-            <Text style={[styles.text, styles.label]}>LastName: </Text>
+            <Text style={[styles.text, styles.label]}>Last Name: </Text>
             <Text style={[styles.text, styles.label]}>Company: </Text>
           </View>
           <View style={[styles.right, styles.col]}>
@@ -107,7 +107,7 @@ class ResultDetail extends Component {
           <View style={[styles.inputContainer, {borderColor: color}]}>
             <TextInput
               style={[styles.input, {color: color}]}
-              placeholder="Enter Temperature"
+              placeholder="00.0"
               value={temperature}
               onChangeText={temp => this.handleChangeTemp(temp)}
               keyboardType={'number-pad'}
@@ -145,12 +145,12 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'row',
     paddingHorizontal: Theme.padding * 2,
-    marginTop: Theme.margin * 2,
+    marginTop: Theme.margin * 0.5,
   },
   col: {
     justifyContent: 'flex-start',
     alignItems: 'flex-start',
-    paddingVertical: 50,
+    paddingVertical: 0,
   },
   left: {
     flex: 1,
@@ -165,6 +165,8 @@ const styles = StyleSheet.create({
   },
   inputContainer: {
     borderWidth: 1,
+    height: 100,
+    width: 250,
     borderRadius: Theme.radius,
     paddingRight: 10,
     flexDirection: 'row',
@@ -176,7 +178,8 @@ const styles = StyleSheet.create({
     fontSize: 20,
   },
   input: {
-    width: 100,
+    width: 180,
+    fontSize: 60,
     paddingHorizontal: Theme.padding,
     paddingVertical: Theme.padding / 2,
     textAlign: 'center',
@@ -198,8 +201,90 @@ const styles = StyleSheet.create({
   },
   label: {
     fontWeight: '700',
+    height: 25,
   },
   value: {
     fontWeight: '500',
   },
+  inputInfor: {
+    paddingHorizontal: Theme.padding,
+    height: 35,
+  },
 });
+
+// const styles = StyleSheet.create({
+//   container: {
+//     flex: 1,
+//   },
+//   header: {
+//     marginTop: Theme.margin * 2,
+//     height: 40,
+//     justifyContent: 'center',
+//     alignItems: 'center',
+//   },
+//   headerText: {
+//     fontSize: 16,
+//     fontWeight: '700',
+//   },
+//   content: {
+//     flex: 1,
+//     flexDirection: 'row',
+//     paddingHorizontal: Theme.padding * 2,
+//     marginTop: Theme.margin * 2,
+//   },
+//   col: {
+//     justifyContent: 'flex-start',
+//     alignItems: 'flex-start',
+//     paddingVertical: 50,
+//   },
+//   left: {
+//     flex: 1,
+//   },
+//   right: {
+//     flex: 2,
+//   },
+//   submit: {
+//     flex: 1,
+//     justifyContent: 'flex-start',
+//     alignItems: 'center',
+//   },
+//   inputContainer: {
+//     borderWidth: 1,
+//     borderRadius: Theme.radius,
+//     paddingRight: 10,
+//     flexDirection: 'row',
+//     justifyContent: 'center',
+//     alignItems: 'center',
+//   },
+//   c: {
+//     fontWeight: '500',
+//     fontSize: 20,
+//   },
+//   input: {
+//     width: 100,
+//     paddingHorizontal: Theme.padding,
+//     paddingVertical: Theme.padding / 2,
+//     textAlign: 'center',
+//   },
+//   submitButton: {
+//     marginTop: Theme.margin * 2,
+//     borderWidth: 1,
+//     borderColor: Colors.petronas700,
+//     paddingHorizontal: Theme.padding * 2,
+//     paddingVertical: Theme.padding,
+//   },
+//   submitText: {
+//     textAlign: 'center',
+//     fontWeight: '700',
+//     color: Colors.petronas700,
+//   },
+//   text: {
+//     marginVertical: 5,
+//   },
+//   label: {
+//     fontWeight: '700',
+//   },
+//   value: {
+//     fontWeight: '500',
+//   },
+// });

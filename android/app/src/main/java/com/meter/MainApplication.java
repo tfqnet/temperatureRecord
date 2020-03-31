@@ -1,4 +1,4 @@
-package com.temprecord;
+package com.meter;
 
 import android.app.Application;
 import android.content.Context;

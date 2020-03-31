@@ -1,4 +1,4 @@
-package com.temprecord;
+package com.meter;
 
 import com.facebook.react.ReactActivity;
 
@@ -10,6 +10,6 @@ public class MainActivity extends ReactActivity {
    */
   @Override
   protected String getMainComponentName() {
-    return "tempRecord";
+    return "METER";
   }
 }
