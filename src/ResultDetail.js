@@ -4,11 +4,9 @@ import {
   View,
   StyleSheet,
   TextInput,
-  Dimensions,
   TouchableOpacity,
   ScrollView,
   ToastAndroid,
-  Alert,
 } from 'react-native';
 import AsyncStorage from '@react-native-community/async-storage';
 import moment from 'moment';
@@ -16,7 +14,6 @@ import moment from 'moment';
 import Theme from './constants/theme.constant';
 import Colors from './constants/colors.constant';
 
-const {width} = Dimensions.get('screen');
 class ResultDetail extends Component {
   constructor(props) {
     super(props);
@@ -31,6 +28,7 @@ class ResultDetail extends Component {
       time: moment().format('HH:mm:ss'),
       temperature: 0,
       color: Colors.success,
+      isDisabled: false,
     };
   }
 
@@ -60,24 +58,37 @@ class ResultDetail extends Component {
       date,
       time,
       temperature,
+      isDisabled,
     } = this.state;
 
-    const object = {
-      id,
-      firstName,
-      lastName,
-      company,
-      date,
-      time,
-      temperature,
-    };
-
-    const listString = await AsyncStorage.getItem('List');
-    let list = listString ? JSON.parse(listString) : [];
-    list.unshift({...object});
-    await AsyncStorage.setItem('List', JSON.stringify(list));
-    ToastAndroid.show('Record Added.', ToastAndroid.SHORT, ToastAndroid.BOTTOM);
-    this.props.navigation.goBack();
+    if (!isDisabled) {
+      this.setState(
+        {
+          isDisabled: true,
+        },
+        async () => {
+          const object = {
+            id,
+            firstName,
+            lastName,
+            company,
+            date,
+            time,
+            temperature,
+          };
+          const listString = await AsyncStorage.getItem('List');
+          let list = listString ? JSON.parse(listString) : [];
+          list.unshift({...object});
+          await AsyncStorage.setItem('List', JSON.stringify(list));
+          ToastAndroid.show(
+            'Record Added.',
+            ToastAndroid.SHORT,
+            ToastAndroid.BOTTOM,
+          );
+          this.props.navigation.goBack();
+        },
+      );
+    }
   };
 
   render() {

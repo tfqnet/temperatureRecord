@@ -24,7 +24,7 @@ import Colors from './constants/colors.constant';
 import Images from './constants/image.constant';
 import Theme from './constants/theme.constant';
 import Item from './common/Item';
-import RECORDS from './mockData';
+// import RECORDS from './mockData';
 
 const {width, height} = Dimensions.get('window');
 
@@ -122,7 +122,7 @@ class Listing extends Component {
     });
   };
 
-  renderDeleteButton = (index) => {
+  renderDeleteButton = index => {
     return (
       <View style={styles.deleteView}>
         <TouchableOpacity
@@ -153,7 +153,9 @@ class Listing extends Component {
                   ' ' +
                   ((item && item.lastName) || '')}
               </Text>
-              <Text style={styles.companyLabel} numberOfLines={1}>{item && item.company}</Text>
+              <Text style={styles.companyLabel} numberOfLines={1}>
+                {item && item.company}
+              </Text>
               <Text style={styles.timeLabel} numberOfLines={2}>
                 {((item && item.time) || '') +
                   ' ' +
@@ -197,17 +199,18 @@ class Listing extends Component {
       results = list.filter(item =>
         moment(exportDate).isSame(item.date, 'day'),
       );
-      console.log('anhvt14 - share - exportDate', exportDate);
-      console.log('anhvt14 - share - list', list);
-      console.log('anhvt14 - share - results', results);
     }
+
+    const exportDateString = moment(exportDate).format('YYYY MMM DD h-mm-ss a');
 
     // export to excel file
     const ws = XLSX.utils.json_to_sheet(results);
     const wb = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(wb, ws, 'Records');
     const wbout = XLSX.write(wb, {type: 'binary', bookType: 'xlsx'});
-    var file = RNFS.ExternalDirectoryPath + '/Records.xlsx';
+    const filename = 'Records ' + exportDateString + '.xlsx';
+    var file = RNFS.ExternalDirectoryPath + '/' + filename;
+    console.log('anhvt14 - ExternalDirectoryPath', file);
     writeFile(file, wbout, 'ascii')
       .then(r => {
         console.log('anhvt14 - write file successfully', r);
@@ -220,6 +223,7 @@ class Listing extends Component {
           const shareOptions = {
             title: 'Share file',
             url: `data:${type};base64,` + base64Data,
+            filename,
             mimeType:
               'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
           };
@@ -310,43 +314,45 @@ class Listing extends Component {
         <View style={styles.contentView}>
           <Text style={styles.contentLabel}>
             ID:
-            <Text style={{ fontWeight: '300' }}>{" " + selectedId}</Text>
+            <Text style={styles.font300}>{' ' + selectedId}</Text>
           </Text>
         </View>
         <View style={styles.contentView}>
           <Text style={styles.contentLabel}>
             First name:
-            <Text style={{ fontWeight: '300' }}>{" " + selectedFirstName}</Text>
+            <Text style={styles.font300}>{' ' + selectedFirstName}</Text>
           </Text>
         </View>
         <View style={styles.contentView}>
           <Text style={styles.contentLabel}>
             Last name:
-            <Text style={{ fontWeight: '300' }}>{" " + selectedLastName}</Text>
+            <Text style={styles.font300}>{' ' + selectedLastName}</Text>
           </Text>
         </View>
         <View style={styles.contentView}>
           <Text style={styles.contentLabel}>
             Company:
-            <Text style={{ fontWeight: '300' }}>{" " + selectedCompany}</Text>
+            <Text style={styles.font300}>{' ' + selectedCompany}</Text>
           </Text>
         </View>
         <View style={styles.contentView}>
           <Text style={styles.contentLabel}>
             Temp:
-            <Text style={{ fontWeight: '300' }}>{" " + selectedTemperature + '°C'}</Text>
+            <Text style={styles.font300}>
+              {' ' + selectedTemperature + '°C'}
+            </Text>
           </Text>
         </View>
         <View style={styles.contentView}>
           <Text style={styles.contentLabel}>
             Date:
-            <Text style={{ fontWeight: '300' }}>{" " + selectedDate}</Text>
+            <Text style={styles.font300}>{' ' + selectedDate}</Text>
           </Text>
         </View>
         <View style={styles.contentView}>
           <Text style={styles.contentLabel}>
             Time:
-            <Text style={{ fontWeight: '300' }}>{" " + selectedTime}</Text>
+            <Text style={styles.font300}>{' ' + selectedTime}</Text>
           </Text>
         </View>
       </View>
@@ -378,6 +384,9 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: Colors.gray300,
+  },
+  font300: {
+    fontWeight: '300',
   },
   card: {
     flex: 1,

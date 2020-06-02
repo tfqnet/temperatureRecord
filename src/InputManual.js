@@ -4,11 +4,9 @@ import {
   View,
   StyleSheet,
   TextInput,
-  Dimensions,
   TouchableOpacity,
   ScrollView,
   ToastAndroid,
-  Alert,
 } from 'react-native';
 import AsyncStorage from '@react-native-community/async-storage';
 import moment from 'moment';
@@ -16,7 +14,6 @@ import moment from 'moment';
 import Theme from './constants/theme.constant';
 import Colors from './constants/colors.constant';
 
-const {width} = Dimensions.get('screen');
 class InputManual extends Component {
   constructor(props) {
     super(props);
@@ -33,6 +30,7 @@ class InputManual extends Component {
       firstNameError: false,
       lastNameError: false,
       companyError: false,
+      isDisabled: false,
     };
   }
 
@@ -75,7 +73,6 @@ class InputManual extends Component {
   };
 
   handleChangeCompany = company => {
-    console.log("company", company)
     this.setState({
       company,
       companyError: false,
@@ -91,56 +88,52 @@ class InputManual extends Component {
       date,
       time,
       temperature,
+      isDisabled,
     } = this.state;
-    let isError = false;
-    // if (!id || id === '') {
-    //   this.setState({
-    //     idError: true,
-    //   });
-    //   isError = true;
-    // }
-    // if (!firstName || firstName === '') {
-    //   this.setState({
-    //     firstNameError: true,
-    //   });
-    //   isError = true;
-    // }
-    // if (!lastName || lastName === '') {
-    //   this.setState({
-    //     lastNameError: true,
-    //   });
-    //   isError = true;
-    // }
-    // if (!company || company === '') {
-    //   this.setState({
-    //     companyError: true,
-    //   });
-    //   isError = true;
-    // }
-    if (isError) {
-      return;
-    }
+    if (!isDisabled) {
+      this.setState(
+        {
+          isDisabled: true,
+        },
+        async () => {
+          const object = {
+            id,
+            firstName,
+            lastName,
+            company,
+            date,
+            time,
+            temperature,
+          };
 
-    const object = {
+          const listString = await AsyncStorage.getItem('List');
+          let list = listString ? JSON.parse(listString) : [];
+          list.unshift({...object});
+          await AsyncStorage.setItem('List', JSON.stringify(list));
+          ToastAndroid.show(
+            'Record Added.',
+            ToastAndroid.SHORT,
+            ToastAndroid.BOTTOM,
+          );
+          this.props.navigation.goBack();
+        },
+      );
+    }
+  };
+
+  render() {
+    const {
       id,
       firstName,
       lastName,
       company,
-      date,
-      time,
       temperature,
-    };
-
-    const listString = await AsyncStorage.getItem('List');
-    let list = listString ? JSON.parse(listString) : [];
-    list.unshift({...object});
-    await AsyncStorage.setItem('List', JSON.stringify(list));
-    ToastAndroid.show('Record Added.', ToastAndroid.SHORT, ToastAndroid.BOTTOM);
-    this.props.navigation.goBack();
-  };
-
-  render() {
-    const {id, firstName, lastName, company, temperature, color, idError, firstNameError, lastNameError, companyError} = this.state;
+      color,
+      idError,
+      firstNameError,
+      lastNameError,
+      companyError,
+    } = this.state;
     return (
       <ScrollView style={styles.container}>
         {/* <View style={styles.container}> */}
@@ -187,14 +180,9 @@ class InputManual extends Component {
                 companyError ? Colors.danger100 : Colors.gray
               }
               value={company}
-              onChangeText={company => this.handleChangeCompany(company)}
+              onChangeText={comp => this.handleChangeCompany(comp)}
             />
-            {/* <Text style={[styles.text, styles.value]}> {id} </Text>
-            <Text style={[styles.text, styles.value]}> {firstName} </Text>
-            <Text style={[styles.text, styles.value]}> {lastName} </Text>
-            <Text style={[styles.text, styles.value]}> {company} </Text> */}
           </View>
-          {/* <Item label="ID">{id}</Item> */}
         </View>
         <View style={styles.submit}>
           <View style={[styles.inputContainer, {borderColor: color}]}>
