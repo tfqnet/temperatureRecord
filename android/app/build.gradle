@@ -128,11 +128,11 @@ android {
     }
 
     defaultConfig {
-        applicationId "com.meter"
+        applicationId "com.metterv2"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 4
-        versionName "1.3"
+        versionCode 8
+        versionName "1.5"
         missingDimensionStrategy 'react-native-camera', 'general' // <--- insert this line
     }
     splits {
