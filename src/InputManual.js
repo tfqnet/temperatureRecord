@@ -191,7 +191,7 @@ class InputManual extends Component {
               placeholder="00.0"
               value={temperature}
               onChangeText={temp => this.handleChangeTemp(temp)}
-              keyboardType={'number-pad'}
+              keyboardType={'decimal-pad'}
             />
             <Text style={[styles.c, {color: color}]}>°C</Text>
           </View>
