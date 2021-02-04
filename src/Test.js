@@ -16,19 +16,16 @@ class Test extends Component {
     try {
       return await RNFS.readFile(file, 'base64');
     } catch (error) {
-      console.log('anhvt14 - error', error);
       return null;
     }
   };
   share = async () => {
-    console.log('anhvt14 - share');
     const type = 'image/png';
     // const type =
     //   'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';
     // `data:${type};base64,` + base64Data;
     const url = 'file:///storage/emulated/0/Pictures/Screenshots/1.png';
     const base64Data = this.convertFileToBase64(url);
-    console.log('anhvt14 - base64Data', base64Data);
     const configs = {
       url: `data:${type};base64,` + base64Data,
     };

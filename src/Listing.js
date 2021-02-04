@@ -107,7 +107,6 @@ class Listing extends Component {
   keyExtractor = (item, index) => `${item.id}${index}`;
 
   onClickItem = (item, color) => {
-    console.log('anhvt14 - onClickItem', item);
     // const {isModalVisible} = this.state;
     this.setState({
       isModalVisible: true,
@@ -186,7 +185,6 @@ class Listing extends Component {
     try {
       return await RNFS.readFile(file, 'base64');
     } catch (error) {
-      console.log('anhvt14 - error', error);
       return null;
     }
   };
@@ -210,15 +208,12 @@ class Listing extends Component {
     const wbout = XLSX.write(wb, {type: 'binary', bookType: 'xlsx'});
     const filename = 'Records ' + exportDateString + '.xlsx';
     var file = RNFS.ExternalDirectoryPath + '/' + filename;
-    console.log('anhvt14 - ExternalDirectoryPath', file);
     writeFile(file, wbout, 'ascii')
       .then(r => {
-        console.log('anhvt14 - write file successfully', r);
         this.setState({isVisibleExport: false}, async () => {
           const myUrl = 'file:/' + file;
           const type =
             'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';
-          console.log('anhvt14 - share file1', myUrl);
           const base64Data = await this.convertFileToBase64(file);
           const shareOptions = {
             title: 'Share file',
@@ -230,7 +225,6 @@ class Listing extends Component {
           try {
             const ShareResponse = await Share.open(shareOptions);
             RNFS.unlink(file);
-            console.log('anhvt14 - ShareResponse', ShareResponse);
           } catch (error) {
             console.log('Error =>', error);
             RNFS.unlink(file);
@@ -238,7 +232,6 @@ class Listing extends Component {
         });
       })
       .catch(e => {
-        console.log('anhvt14 - write file failed', e);
       });
   };
 
@@ -361,7 +354,6 @@ class Listing extends Component {
 
   render() {
     const {list, isModalVisible} = this.state;
-    // console.log("anhnk7 - list temp", JSON.stringify(list))
     return (
       <View style={styles.container}>
         {this.renderHeader()}

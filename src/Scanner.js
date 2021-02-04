@@ -25,7 +25,6 @@ class Scanner extends Component {
   };
 
   onSuccess = e => {
-    console.log('anhvt14 - ', e);
     const {data} = e;
     const arr = data && data.split('\n');
     if (!arr || arr.length !== 4) {
