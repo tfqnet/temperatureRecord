@@ -42,7 +42,7 @@
     "@react-native-community/async-storage": "^1.8.1",
     "@react-native-community/datetimepicker": "^2.3.0",
     "@react-native-community/masked-view": "^0.1.7",
-    "moment": "^2.24.0",
+    "moment": "^2.29.4",
     "react": "16.9.0",
     "react-native": "0.61.1",
     "react-native-camera": "^3.21.0",
